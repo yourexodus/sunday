@@ -20,6 +20,7 @@ prepared_data = PrepareData(download_new=False)
 df = prepared_data.read_local_data('all',"data/prepared")
 # Instantiate the dash app
 app = dash.Dash(__name__)
+server = app.server
 # Create the app
 # header
 link = dbc.NavLink("View Github Repository", href="https://github.com/yourexodus/capstone_CDC")
