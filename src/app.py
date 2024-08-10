@@ -5,8 +5,8 @@ import dash
 # Creates the interactive dashboard using the dash library
 import pandas as pd
 import dash
-
-from dash_table import DataTable
+from dash import dash_table
+# from dash_table import DataTable
 from dash.dependencies import Output, Input, State
 import dash_bootstrap_components as dbc
 from dash import html, dcc, dash_table
