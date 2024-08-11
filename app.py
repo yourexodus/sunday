@@ -640,10 +640,9 @@ doctorcat_item = html.Div(
 )
 doctorcat_item.style = {'gridArea': "doctorcat_item"}
 
-MeowMidwest_item = html.Iframe(src="src/assets/Presentation1.mp4",
-                               style={"height": "800", "width": "800"})
-
 # Update the video element to use the get_video_frame function
+meowmidwest_img = html.Iframe(src="assets/MeowMidwest.mp4",
+                              style={"height": "800", "width": "600"})
 meowmidwest_img = html.Iframe(src="src/assets/MeowMidwest.mp4",
                               style={"height": "800", "width": "600"})
 
@@ -1336,6 +1335,8 @@ predictionCode_item = html.Div(
 )
 predictionCode_item.style = {'gridArea': "predictionCode_item"}
 ##############################################################
+code_img = html.Iframe(src="assets/code.mp4",
+                       style={"height": "800", "width": "800"})
 code_img = html.Iframe(src="src/assets/code.mp4",
                        style={"height": "800", "width": "800"})
 
@@ -1877,5 +1878,5 @@ def change_area_graphs(sum_cell, sum_data):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True, port=8054)
+    app.run_server(debug=True)
 
