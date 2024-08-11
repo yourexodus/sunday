@@ -590,7 +590,7 @@ link = dbc.NavLink("View Github Repository", href="https://github.com/yourexodus
 #############      BANNER ITEM   ############
 #### ********************************  ######
 banner_img_path = "assets/banner2.PNG"
-banner_img = Image.open(banner_img_path).convert('RGB')
+banner_img = Image.open(banner_img_path)
 
 banner_item = dbc.Row(
     [
