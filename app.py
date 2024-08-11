@@ -641,11 +641,19 @@ doctorcat_item = html.Div(
 doctorcat_item.style = {'gridArea': "doctorcat_item"}
 
 # Update the video element to use the get_video_frame function
-meowmidwest_img = html.Iframe(src="assets/MeowMidwest.mp4",
-                              style={"height": "800", "width": "600"})
-meowmidwest_img = html.Iframe(src="src/assets/MeowMidwest.mp4",
-                              style={"height": "800", "width": "600"})
+meowmidwest_img = html.Div(
+    html.Div( className="prentvideo2" ,
+              children=[
+                    html.Br() , html.Br() ,
 
+
+                    html.Iframe( src="assets/MeowMidwest.gif" ,  # Update source to point to image.html
+                                 style={"height": "600px", "width": "600px"} ),
+
+
+                  ] ,
+              )
+    )
 meowmidwest_item = html.Div(
     [
         html.Div(
@@ -1335,9 +1343,7 @@ predictionCode_item = html.Div(
 )
 predictionCode_item.style = {'gridArea': "predictionCode_item"}
 ##############################################################
-code_img = html.Iframe(src="assets/code.mp4",
-                       style={"height": "800", "width": "800"})
-code_img = html.Iframe(src="src/assets/code.mp4",
+code_img = html.Iframe(src="assets/PredictionProgram.gif",
                        style={"height": "800", "width": "800"})
 
 code_item = html.Div(
@@ -1878,5 +1884,5 @@ def change_area_graphs(sum_cell, sum_data):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=True,port=8054)
 
