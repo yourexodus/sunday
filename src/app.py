@@ -11,6 +11,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import plotly.express as px
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import StandardScaler
 from PIL import Image
 
 url = (
@@ -644,7 +645,7 @@ MeowMidwest_item = html.Iframe(src="src/assets/Presentation1.mp4",
 
 # Update the video element to use the get_video_frame function
 meowmidwest_img = html.Iframe(src="src/assets/MeowMidwest.mp4",
-                              style={"height": "500", "width": "400"})
+                              style={"height": "800", "width": "600"})
 
 meowmidwest_item = html.Div(
     [
@@ -1336,7 +1337,7 @@ predictionCode_item = html.Div(
 predictionCode_item.style = {'gridArea': "predictionCode_item"}
 ##############################################################
 code_img = html.Iframe(src="src/assets/code.mp4",
-                       style={"height": "500", "width": "400"})
+                       style={"height": "800", "width": "800"})
 
 code_item = html.Div(
     [
