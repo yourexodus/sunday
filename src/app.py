@@ -1323,8 +1323,6 @@ code_item = html.Div(
     ]
 
 )
-
-
 code_item.style = {'gridArea': "code_item"}
 
 ##############################################################
