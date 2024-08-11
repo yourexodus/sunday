@@ -564,6 +564,7 @@ app = dash.Dash(
         "https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/flatly/bootstrap.min.css"
     ],
 )
+server = app.server
 # Initialize user_input_value
 user_input_value = 1
 
