@@ -2,6 +2,7 @@ import dash
 
 # Creates the interactive dashboard using the dash library
 import pandas as pd
+import numpy as np
 from dash import dash_table
 from dash_table import DataTable
 from dash.dependencies import Output, Input, State
@@ -1318,7 +1319,7 @@ predictionCode_item.style = {'gridArea': "predictionCode_item"}
 ##############################################################
 code_item = html.Div(
     [
-        html.Img(src="assets/PredictionProgram.gif", alt="Meow Midwest", style={"width": "800px", "height": "700px"})
+        html.Img(src="assets/PredictionProgram.gif", alt="Meow Midwest", style={"width": "800px", "height": "4800px"})
     ]
 
 )
@@ -1386,10 +1387,14 @@ app.layout = html.Div([
     mytable,  # add doctor cat
     ########################################################
     ############# Prediction output ######################
-
+    html.Div(html.H2("Questionaire"))
+    ,
+    html.Br()
+    ,
     html.Div(
+
         children=[
-            html.H3(
+            html.A(
                 "Note: drop downs are in a persistence state.  click new values in all the fields to populate a prediction.  The last field will calls the prediction.  It can take a copule minutes  to display")
         ])
     ,
@@ -1410,12 +1415,15 @@ app.layout = html.Div([
         style={
             "display": "block"
         }
+
     ),
+
+
     ######################################################################
     ##################  OUTPUT VALUE for income #######################
 
     html.Div(id='income-output'),
-
+    html.Br(),
     #################################################################################################
     ###########  gen_health  ########################################################################
     ################################################################################################
@@ -1437,7 +1445,7 @@ app.layout = html.Div([
     ##################  OUTPUT VALUE for general health #######################
 
     html.Div(id='gen-health-output'),
-
+    html.Br(),
     ################################################################################################
     html.Div(
         children=[
@@ -1457,7 +1465,7 @@ app.layout = html.Div([
     ##################  OUTPUT VALUE for physical health days #######################
 
     html.Div(id='phy-health-output'),
-
+    html.Br(),
     ################################################################################################
     html.Div(
         children=[
@@ -1477,7 +1485,7 @@ app.layout = html.Div([
     ##################  OUTPUT VALUE for mental health #######################
 
     html.Div(id='men-health-output'),
-
+    html.Br(),
     #################################
     html.Div(
         children=[
@@ -1493,6 +1501,7 @@ app.layout = html.Div([
             "display": "block"
         }
     ),
+    html.Br(),
     ######################################################################
     ##################  OUTPUT VALUE for income #######################
     html.Div(

@@ -2,6 +2,7 @@ import dash
 
 # Creates the interactive dashboard using the dash library
 import pandas as pd
+import numpy as np
 from dash import dash_table
 from dash_table import DataTable
 from dash.dependencies import Output, Input, State
@@ -641,32 +642,13 @@ doctorcat_item = html.Div(
 doctorcat_item.style = {'gridArea': "doctorcat_item"}
 
 # Update the video element to use the get_video_frame function
-meowmidwest_img = html.Iframe(src="assets/MeowMidwest.mp4",
-                              style={"height": "800", "width": "600"})
-meowmidwest_img = html.Iframe(src="src/assets/MeowMidwest.mp4",
-                              style={"height": "800", "width": "600"})
-
 meowmidwest_item = html.Div(
     [
-        html.Div(
-            html.Div(
-                [
-                    html.Div([meowmidwest_img]),
-                    html.Div(className="sidebar-wrapper"),
-                ]
-            ),
-            className="sidebar",
-        ),
-        html.Div(
-            html.Div(
-                html.Div(className="container-fluid"),
-                className="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ",
-            ),
-            className="main-panel"  # ,  
-
-        ),
-    ]
+        html.Img(src="assets/MeowMidwest.gif", alt="Meow Midwest", style={"width": "550px", "height": "500px"})
+    ],
+   # style={"border": "1px solid black", "width": "550x", "height": "500px"}
 )
+
 meowmidwest_item.style = {'gridArea': "meowmidwest_item"}
 menu_income = [
     {'label': '1 - Less than $10,000', 'value': 1},
@@ -1335,32 +1317,14 @@ predictionCode_item = html.Div(
 )
 predictionCode_item.style = {'gridArea': "predictionCode_item"}
 ##############################################################
-code_img = html.Iframe(src="assets/code.mp4",
-                       style={"height": "800", "width": "800"})
-code_img = html.Iframe(src="src/assets/code.mp4",
-                       style={"height": "800", "width": "800"})
-
 code_item = html.Div(
     [
-        html.Div(
-            html.Div(
-                [
-                    html.Div([code_img]),
-                    html.Div(className="sidebar-wrapper"),
-                ]
-            ),
-            className="sidebar",
-        ),
-        html.Div(
-            html.Div(
-                html.Div(className="container-fluid"),
-                className="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ",
-            ),
-            className="main-panel",  #  
-
-        ),
+        html.Img(src="assets/PredictionProgram.gif", alt="Meow Midwest", style={"width": "800px", "height": "4800px"})
     ]
+
 )
+
+
 code_item.style = {'gridArea': "code_item"}
 
 ##############################################################
@@ -1423,10 +1387,14 @@ app.layout = html.Div([
     mytable,  # add doctor cat
     ########################################################
     ############# Prediction output ######################
-
+    html.Div(html.H2("Questionaire"))
+    ,
+    html.Br()
+    ,
     html.Div(
+
         children=[
-            html.H3(
+            html.A(
                 "Note: drop downs are in a persistence state.  click new values in all the fields to populate a prediction.  The last field will calls the prediction.  It can take a copule minutes  to display")
         ])
     ,
@@ -1447,12 +1415,15 @@ app.layout = html.Div([
         style={
             "display": "block"
         }
+
     ),
+
+
     ######################################################################
     ##################  OUTPUT VALUE for income #######################
 
     html.Div(id='income-output'),
-
+    html.Br(),
     #################################################################################################
     ###########  gen_health  ########################################################################
     ################################################################################################
@@ -1474,7 +1445,7 @@ app.layout = html.Div([
     ##################  OUTPUT VALUE for general health #######################
 
     html.Div(id='gen-health-output'),
-
+    html.Br(),
     ################################################################################################
     html.Div(
         children=[
@@ -1494,7 +1465,7 @@ app.layout = html.Div([
     ##################  OUTPUT VALUE for physical health days #######################
 
     html.Div(id='phy-health-output'),
-
+    html.Br(),
     ################################################################################################
     html.Div(
         children=[
@@ -1514,7 +1485,7 @@ app.layout = html.Div([
     ##################  OUTPUT VALUE for mental health #######################
 
     html.Div(id='men-health-output'),
-
+    html.Br(),
     #################################
     html.Div(
         children=[
@@ -1530,6 +1501,7 @@ app.layout = html.Div([
             "display": "block"
         }
     ),
+    html.Br(),
     ######################################################################
     ##################  OUTPUT VALUE for income #######################
     html.Div(
@@ -1878,5 +1850,5 @@ def change_area_graphs(sum_cell, sum_data):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=True,port=8054)
 
