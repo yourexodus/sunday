@@ -641,40 +641,13 @@ doctorcat_item = html.Div(
 doctorcat_item.style = {'gridArea': "doctorcat_item"}
 
 # Update the video element to use the get_video_frame function
-meowmidwest_img = html.Div(
-    html.Div( className="prentvideo2" ,
-              children=[
-                    html.Br() , html.Br() ,
-
-
-                    html.Iframe( src="assets/MeowMidwest.gif" ,  # Update source to point to image.html
-                                 style={"height": "600px", "width": "600px"} ),
-
-
-                  ] ,
-              )
-    )
 meowmidwest_item = html.Div(
     [
-        html.Div(
-            html.Div(
-                [
-                    html.Div([meowmidwest_img]),
-                    html.Div(className="sidebar-wrapper"),
-                ]
-            ),
-            className="sidebar",
-        ),
-        html.Div(
-            html.Div(
-                html.Div(className="container-fluid"),
-                className="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ",
-            ),
-            className="main-panel"  # ,  
-
-        ),
-    ]
+        html.Img(src="assets/MeowMidwest.gif", alt="Meow Midwest", style={"width": "550px", "height": "500px"})
+    ],
+   # style={"border": "1px solid black", "width": "550x", "height": "500px"}
 )
+
 meowmidwest_item.style = {'gridArea': "meowmidwest_item"}
 menu_income = [
     {'label': '1 - Less than $10,000', 'value': 1},
@@ -1343,8 +1316,12 @@ predictionCode_item = html.Div(
 )
 predictionCode_item.style = {'gridArea': "predictionCode_item"}
 ##############################################################
-code_img = html.Iframe(src="assets/PredictionProgram.gif",
-                       style={"height": "800", "width": "800"})
+code_item = html.Div(
+    [
+        html.Img(src="assets/code.gif", alt="Meow Midwest", style={"width": "800px", "height": "700px"})
+    ],
+
+)
 
 code_item = html.Div(
     [
