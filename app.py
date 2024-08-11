@@ -1318,32 +1318,12 @@ predictionCode_item.style = {'gridArea': "predictionCode_item"}
 ##############################################################
 code_item = html.Div(
     [
-        html.Img(src="assets/code.gif", alt="Meow Midwest", style={"width": "800px", "height": "700px"})
-    ],
-
-)
-
-code_item = html.Div(
-    [
-        html.Div(
-            html.Div(
-                [
-                    html.Div([code_img]),
-                    html.Div(className="sidebar-wrapper"),
-                ]
-            ),
-            className="sidebar",
-        ),
-        html.Div(
-            html.Div(
-                html.Div(className="container-fluid"),
-                className="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ",
-            ),
-            className="main-panel",  #  
-
-        ),
+        html.Img(src="assets/PredictionProgram.gif", alt="Meow Midwest", style={"width": "800px", "height": "700px"})
     ]
+
 )
+
+
 code_item.style = {'gridArea': "code_item"}
 
 ##############################################################
