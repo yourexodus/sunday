@@ -644,7 +644,7 @@ doctorcat_item.style = {'gridArea': "doctorcat_item"}
 # Update the video element to use the get_video_frame function
 meowmidwest_item = html.Div(
     [
-        html.Img(src="assets/MeowMidwest.gif", alt="Meow Midwest", style={"width": "550px", "height": "500px"})
+        #html.Img(src="assets/MeowMidwest.gif", alt="Meow Midwest", style={"width": "550px", "height": "500px"})
     ],
    # style={"border": "1px solid black", "width": "550x", "height": "500px"}
 )
@@ -1319,7 +1319,7 @@ predictionCode_item.style = {'gridArea': "predictionCode_item"}
 ##############################################################
 code_item = html.Div(
     [
-        html.Img(src="assets/PredictionProgram.gif", alt="predprogram", style={"width": "800px", "height": "450px"})
+        #html.Img(src="assets/PredictionProgram.gif", alt="predprogram", style={"width": "800px", "height": "450px"})
     ]
 
 )
