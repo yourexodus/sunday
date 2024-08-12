@@ -1395,13 +1395,14 @@ app.layout = html.Div([
 
         children=[
             html.A(
-                "Note: drop downs are in a persistence state.  click new values in all the fields to populate a prediction.  The last field will calls the prediction.  It can take a few minutes  to display")
+                "Note: drop downs are in a persistence state.  click new values in all the fields to populate a prediction.  The last field will calls the prediction.  It can take up to 4 minutes  to display")
         ])
     ,
     ########################################################################################################
     ################## Define input and out for income drop down ###########################################
     #######################################################################################################
-
+    html.Br()
+    ,
     html.Div(
         children=[
             'Please choose your income range.:', dcc.Dropdown(
