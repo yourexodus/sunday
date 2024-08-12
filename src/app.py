@@ -1,6 +1,7 @@
 import dash
 
 # Creates the interactive dashboard using the dash library
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from dash import dash_table
@@ -432,18 +433,16 @@ class PrepareData:
             df: The original DataFrame.
             x: General health
             y: type
-            z: Diabetes_binary
+
         Returns:
             A Pandas DataFrame containing counts, percentages, and the combined column.
         """
         filter1 = df['GeneralHealth'] == x
         filter2 = df['Type'] == y
         if y == "nondiabetic":
-            z = 0
+            filter3 = df['Diabetes_binary'] == 0
         else:
-            z = 1
-
-        filter3 = df['Diabetes_binary'] == z
+            filter3 = df['Diabetes_binary'] == 1
 
         test = df[filter1 & filter2 & filter3]  #
         counts_gender = test[['Gender']].value_counts().reset_index(name='count')
@@ -464,6 +463,13 @@ class PrepareData:
                          'rgb(175, 49, 35)', 'rgb(36, 73, 147)']
         cafe_colors = ['rgb(146, 123, 21)', 'rgb(177, 180, 34)', 'rgb(206, 206, 40)',
                        'rgb(175, 51, 21)', 'rgb(35, 36, 21)']
+
+        # Convert color lists to dictionaries
+        night_colors_dict = dict(zip(range(len(night_colors)), night_colors))
+        sunflowers_colors_dict = dict(zip(range(len(sunflowers_colors)), sunflowers_colors))
+        irises_colors_dict = dict(zip(range(len(irises_colors)), irises_colors))
+
+        # Define pie charts
 
         # Create subplots, using 'domain' type for pie charts
         specs = [[{'type': 'domain'}, {'type': 'domain'}], [{'type': 'domain'}, {'type': 'domain'}]]
@@ -644,7 +650,7 @@ doctorcat_item.style = {'gridArea': "doctorcat_item"}
 # Update the video element to use the get_video_frame function
 meowmidwest_item = html.Div(
     [
-        #html.Img(src="assets/MeowMidwest.gif", alt="Meow Midwest", style={"width": "550px", "height": "500px"})
+        html.Img(src="assets/MeowMidwest.gif", alt="Meow Midwest", style={"width": "550px", "height": "500px"})
     ],
    # style={"border": "1px solid black", "width": "550x", "height": "500px"}
 )
@@ -1319,7 +1325,7 @@ predictionCode_item.style = {'gridArea': "predictionCode_item"}
 ##############################################################
 code_item = html.Div(
     [
-        #html.Img(src="assets/PredictionProgram.gif", alt="predprogram", style={"width": "800px", "height": "450px"})
+        html.Img(src="assets/PredictionProgram.gif", alt="predprogram", style={"width": "800px", "height": "450px"})
     ]
 
 )
@@ -1860,5 +1866,5 @@ def change_area_graphs(sum_cell, sum_data):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True,port=8054)
+    app.run_server(debug=True, port=8054)
 
