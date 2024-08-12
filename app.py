@@ -1683,7 +1683,7 @@ app.layout = html.Div([
 
     html.Div(
         children=[
-            html.H2("Step 3: Create Predictive models")
+            html.H2("Step 4: Create Predictive models")
         ])
     ,
     html.Br()
