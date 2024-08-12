@@ -1395,7 +1395,7 @@ app.layout = html.Div([
 
         children=[
             html.A(
-                "Note: drop downs are in a persistence state.  click new values in all the fields to populate a prediction.  The last field will calls the prediction.  It can take a copule minutes  to display")
+                "Note: drop downs are in a persistence state.  click new values in all the fields to populate a prediction.  The last field will calls the prediction.  It can take a few minutes  to display")
         ])
     ,
     ########################################################################################################
@@ -1615,7 +1615,7 @@ app.layout = html.Div([
 
     html.Div(
         children=[
-            html.H3("Address Outliers using IQR method")
+            html.H3("1-Address Outliers using IQR method")
         ])
 
     ,
@@ -1631,9 +1631,11 @@ app.layout = html.Div([
         ])
 
     ,
+    html.Br()
+    ,
     html.Div(
         children=[
-            html.H3("Replace codes with label for better interprepation of data")
+            html.H3("2-Replace codes with label for better interprepation of data")
         ])
 
     ,
@@ -1642,25 +1644,31 @@ app.layout = html.Div([
     ,
     html.Div(
         children=[
-            html.H3("Top 4 header rows of updated data table")
+            html.A("Top 4 header rows of updated data table")
         ])
     ,
     html.Div([updated_table])
     ,
+    html.Br()
+    ,
     html.Div(
         children=[
-            html.H3("Aggregate and view Bar chart percentage")
+            html.H3("3-Aggregate and view Bar chart percentage")
         ])
     ,
 
     html.Div([graph_01])
     ,
+    html.Br()
+    ,
     html.Div(
         children=[
-            html.H3(
-                "The 3 Interactive Graphs will update to match your row selection on the summary table to provide additional insights on the data for each row")
+            html.A(
+                "Each row selected in the table below will provide insight on the percentages in the circle graph above.  For furher insight you can select a row the 3 interactive Graphs below will update .  If you hoover over the graphs you can see more information about the  selected population")
         ])
 
+    ,
+    html.Br()
     ,
     html.Div([summary_table])
     ,
@@ -1677,7 +1685,8 @@ app.layout = html.Div([
             html.H2("Step 3: Create Predictive models")
         ])
     ,
-
+    html.Br()
+    ,
     html.Div(
         children=[
             html.H3("Nominal Classification Problem: Predict diabetis for a customer.")
