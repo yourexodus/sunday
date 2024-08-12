@@ -873,9 +873,9 @@ issues = [
 
 treatment = [
 
-    "1- Address Outliers using IQR method",
-    "2- Replace codes with label for better interprepation of data",
-    "3- Aggregrate data for graph"
+    "a. Address Outliers using IQR method",
+    "b. Replace codes with label for better interprepation of data",
+    "c. Aggregrate data for graph"
 ]
 
 #########################################################################################
@@ -1616,7 +1616,7 @@ app.layout = html.Div([
 
     html.Div(
         children=[
-            html.H3("1-Address Outliers using IQR method")
+            html.H3("a. Address Outliers using IQR method")
         ])
 
     ,
@@ -1636,7 +1636,7 @@ app.layout = html.Div([
     ,
     html.Div(
         children=[
-            html.H3("2-Replace codes with label for better interprepation of data")
+            html.H3("b. Replace codes with label for better interprepation of data")
         ])
 
     ,
@@ -1654,7 +1654,7 @@ app.layout = html.Div([
     ,
     html.Div(
         children=[
-            html.H3("3-Aggregate and view Bar chart percentage")
+            html.H3("c. Aggregate and view Bar chart percentage")
         ])
     ,
 
@@ -1683,7 +1683,7 @@ app.layout = html.Div([
 
     html.Div(
         children=[
-            html.H2("Step 4: Create Predictive models")
+            html.H2("Step 3: Create Predictive models")
         ])
     ,
     html.Br()
@@ -1721,7 +1721,7 @@ app.layout = html.Div([
 
     html.Div(
         children=[
-            html.H2("Step 5: Create Test program to accept user input and display prediction")
+            html.H2("Step 4: Create Test program to accept user input and display prediction")
         ])
     ,
     programlink
