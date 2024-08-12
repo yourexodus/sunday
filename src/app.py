@@ -1319,7 +1319,7 @@ predictionCode_item.style = {'gridArea': "predictionCode_item"}
 ##############################################################
 code_item = html.Div(
     [
-        html.Img(src="assets/PredictionProgram.gif", alt="predprogram", style={"width": "800px", "height": "480px"})
+        html.Img(src="assets/PredictionProgram.gif", alt="predprogram", style={"width": "800px", "height": "450px"})
     ]
 
 )
