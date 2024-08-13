@@ -563,8 +563,8 @@ class PrepareData:
         fig.update_layout(title='Distribution of Health by Type')
 
         return fig
-
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, suppress_callback_exceptions=True)
+#app = dash.Dash(__name__)
 #app = dash.Dash(
 #    __name__,
 #    # stylesheet for dash_bootstrap_components
@@ -725,12 +725,6 @@ diff = [
 ]
 
 
-#############################################################################
-################## Layout Diff:  will hold the result of the prediction #####
-
-############################################################################
-################## Layout: Prediction VALUE message ########################
-############################################################################
 
 
 ############################################################################
@@ -1375,14 +1369,133 @@ flowchart_item.style = {'gridArea': "flowchart_item"}
 ##################    LAYOUT SECTION ####################################################
 #########################################################################################
 
-# layout is saved to a variable so I dont have to keep running it
-app.layout = html.Div([
-    link,
-    banner_item,
-    mytable,  # add doctor cat
-    ########################################################
-    ############# Prediction output ######################
-    html.Div(html.H2("Questionaire"))
+
+app.layout = dbc.Container([
+    # Header section for banner and links
+    dbc.Row([
+        dbc.Col(banner_item),
+        dbc.Col(link, className="ml-auto")
+    ]),
+    dbc.Row(
+        [
+            dbc.Col(mytable)
+        ]
+    ),
+    dbc.Row(
+        [
+            dbc.Col(
+                [
+                    html.H2("Questionnaire"),
+                ],
+                width=12,
+            )
+        ]
+    )
+    ,
+    dbc.Row(
+        [
+            dbc.Col(
+                [
+                    html.Label("Income Range"),
+                    dcc.Dropdown(
+                        id='menu_income_id',
+                        options=menu_income,
+                        placeholder="Please choose your income range.",
+                        value=user_input_value,
+                        persistence=True,  # store user dropdown
+                    ),
+                    html.Div(id='income-output'),
+                ],
+                width=3,
+            ),
+            dbc.Col(
+                [
+                    html.Label("General Health"),
+                    dcc.Dropdown(
+                        id='gen_health_id',
+                        options=gen_health,
+                        placeholder="Please enter your general health code.",
+                        value=user_input_value,
+                        persistence=True,  # store user dropdown
+                    ),
+                    html.Div(id='gen-health-output'),
+                ],
+                width=3,
+            ),
+            dbc.Col(
+                [
+                    html.Label("Physical Health"),
+                    dcc.Dropdown(
+                        id='phy_health_id',
+                        options=phy_health,
+                        placeholder="Please enter your physical health code.",
+                        value=user_input_value,
+                        persistence=True,  # store user dropdown
+                    ),
+                    html.Div(id='phy-health-output'),
+                ],
+                width=3,
+            ),
+            dbc.Col(
+                [
+                    html.Label("Mental Health"),
+                    dcc.Dropdown(
+                        id='men_health_id',
+                        options=men_health,
+                        placeholder="Please enter your mental health code.",
+                        value=user_input_value,
+                        persistence=True,  # store user dropdown
+                    ),
+                    html.Div(id='men-health-output'),
+                ],
+                width=3,
+            ),
+            dbc.Col(
+                [
+                    html.Label("Difficulty Walking"),
+                    dcc.Dropdown(
+                        id='diff_id',
+                        options=diff,
+                        placeholder="Please enter number of days you have difficult walking.",
+                        value=user_input_value,
+                        persistence=True,  # store user dropdown
+                    ),
+                    html.Div(id='diff-output'),
+                ],
+                width=3,
+            ),
+        ]
+    ),
+    dcc.Input(id='combined_input', type='hidden')  # Hidden input to store combined value
+    ,
+    dbc.Row(
+        [
+            dbc.Col(
+                [
+                    html.H2(id='prediction-output'),
+                ],
+                width=12,
+            )
+        ]
+    ),
+
+
+
+
+])
+
+"""
+
+
+
+
+                    # layout is saved to a variable so I dont have to keep running it
+                    app.layout2 = html.Div([
+
+                ########################################################
+                ############# Prediction output ######################
+                html.Div(html.H2("Questionaire")]
+)
     ,
     html.Br()
     ,
@@ -1392,123 +1505,6 @@ app.layout = html.Div([
             html.A(
                 "Note: drop downs are in a persistence state.  click new values in all the fields to populate a prediction.  The last field will calls the prediction.  It can take up to 4 minutes  to display")
         ])
-    ,
-    ########################################################################################################
-    ################## Define input and out for income drop down ###########################################
-    #######################################################################################################
-    html.Br()
-    ,
-    html.Div(
-        children=[
-            'Please choose your income range.:', dcc.Dropdown(
-                id='menu_income_id',
-                options=menu_income,
-                placeholder="Please choose your income range.",
-                value=user_input_value,
-                persistence=True,  # store user dropdown
-            )
-        ],
-        style={
-            "display": "block"
-        }
-
-    ),
-
-
-    ######################################################################
-    ##################  OUTPUT VALUE for income #######################
-
-    html.Div(id='income-output'),
-    html.Br(),
-    #################################################################################################
-    ###########  gen_health  ########################################################################
-    ################################################################################################
-    html.Div(  # Assuming user_input1 is a Div
-        children=[
-            "Please enter your general health code:", dcc.Dropdown(
-                id='gen_health_id',
-                options=gen_health,
-                placeholder="Please enter your general health code.",
-                value=user_input_value,
-                persistence=True,  # store user dropdown
-            )
-        ],
-        style={
-            "display": "block",  # Set display to block
-        }
-    ),
-    ######################################################################
-    ##################  OUTPUT VALUE for general health #######################
-
-    html.Div(id='gen-health-output'),
-    html.Br(),
-    ################################################################################################
-    html.Div(
-        children=[
-            "Please choose your physical health code:", dcc.Dropdown(
-                id='phy_health_id',
-                options=phy_health,
-                placeholder="Please choose your physical health code.",
-                value=user_input_value,
-                persistence=True,  # store user dropdown
-            )
-        ],
-        style={
-            "display": "block"
-        }
-    ),
-    ######################################################################
-    ##################  OUTPUT VALUE for physical health days #######################
-
-    html.Div(id='phy-health-output'),
-    html.Br(),
-    ################################################################################################
-    html.Div(
-        children=[
-            "Please choose your physical health range:", dcc.Dropdown(
-                id='men_health_id',
-                options=men_health,
-                placeholder="Please choose your physical health range.",
-                value=user_input_value,
-                persistence=True,  # store user dropdown
-            )
-        ],
-        style={
-            "display": "block"
-        }
-    ),
-    ######################################################################
-    ##################  OUTPUT VALUE for mental health #######################
-
-    html.Div(id='diff-output'),
-    html.Br(),
-    #################################
-    html.Div(
-        children=[
-            "Please choose number of days you had diffculty walking:", dcc.Dropdown(
-                id='diff_id',
-                options=diff,
-                placeholder="Please choose number of days you had diffculty walking.",
-                value=user_input_value,
-                persistence=True,  # store user dropdown
-            )
-        ],
-        style={
-            "display": "block"
-        }
-    ),
-    html.Br(),
-    ######################################################################
-    ##################  OUTPUT VALUE for income #######################
-    html.Div(
-        children=[
-            html.H2(id='diff-output')
-        ])
-
-    ,
-    html.Br()
-    ,
-    html.Div(id='prediction-output')
     ,
 
     html.Br(),
@@ -1803,8 +1799,8 @@ def callback_d(men_health_value):
     gl_men_health = men_health_value
     return 'Youve selected "{}"'.format(men_health_value)
 @app.callback(
-    Output('diff-output', 'children'),
-    [Input('diff_id', 'value')]
+    Output('diff2-output', 'children'),
+    [Input('diff2_id', 'value')]
 )
 def callback_d(diff_value):
     gl_diff = diff_value
@@ -1813,29 +1809,31 @@ def callback_d(diff_value):
 #################################################
 ###### call back for phy health
 ############################################
-
+"""
 @app.callback(
     Output('prediction-output', 'children'),
-    [Input('combined_input', 'value')],  # Combine all inputs into a single input
+    [Input('menu_income_id', 'value'),
+     Input('gen_health_id', 'value'),
+     Input('phy_health_id', 'value'),
+     Input('men_health_id', 'value'),
+     Input('diff_id', 'value')
+     ],  # Combine all inputs into a single input
     prevent_initial_call=True
 )
-def callback_e(combined_input):
-    if not all(combined_input.values()):
-        return 'Youve selected "{}"'.format(combined_input['diff_value'])
+def update_prediction(income, gen_health, phy_health, men_health, diff):
 
-    # Extract values from the combined input
-    menu_income_id = combined_input['menu_income_id']
-    gen_health_id = combined_input['gen_health_id']
-    phy_health_id = combined_input['phy_health_id']
-    men_health_id = combined_input['men_health_id']
-    diff_value = combined_input['diff_value']
+    all_input_data = [income, gen_health, phy_health, men_health, diff]
+    if None in all_input_data:
+        return 'Enter all data'
 
-    all_input_data = [menu_income_id, gen_health_id, phy_health_id, men_health_id, diff_value]
-    result = prepared_data.make_prediction(all_input_data)
-    return result
+    prediction = prepared_data.make_prediction(all_input_data)
+    return f"Predicted outcome: {prediction}"
 
+
+if __name__ == "__main__":
+    app.run_server(debug=True, port=8056)
     #return result + ".  Refresh your browser to start again"
-
+"""
 
 ###########################################################################
 ####### Call back for graphs
@@ -1857,13 +1855,12 @@ def change_area_graphs(sum_cell, sum_data):
     #    -------
     #    List of three plotly figures, one for each of the `Output`
     #    """
-    row_number = sum_cell["row"]
-    row_data = sum_data[row_number]
+#   """ row_number = sum_cell["row"]
+#    row_data = sum_data[row_number]#
 
-    fig = prepared_data.create_dataframe_counts_specificGenH_fig(df, row_data["GeneralHealth"], row_data["Type"])
-    return fig
+ #   fig = prepared_data.create_dataframe_counts_specificGenH_fig(df, row_data["GeneralHealth"], row_data["Type"])
+#    return fig
+#"""
 
 
-if __name__ == "__main__":
-    app.run_server(debug=True)
 
