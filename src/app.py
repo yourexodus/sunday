@@ -14,6 +14,8 @@ from plotly.subplots import make_subplots
 import plotly.express as px
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 from PIL import Image
 
 url = (
@@ -373,9 +375,37 @@ class PrepareData:
             prt = f"You have a {result:.0f}% probability you will not be diagnosed with diabetes."
         else:
             probability_pred = rfc.predict_proba(reshaped_data)[:, 0]
-            result = probability_pred[0] * 100
+            result = probability_pred[1] * 100
             prt = f"You have a {result:.0f}% probability you will be diagnosed with diabetes."
 
+        return prt
+    def pred_Lasso(self,user_input):
+
+
+
+        # Assuming you have your  
+        #data as X(features) and y(target variable)
+        cols = ['Income', 'GenHlth', 'MentHlth', 'PhysHlth', 'DiffWalk']
+        df = self.read_local_data('all', 'data/raw')
+        y = df['Diabetes_binary']
+        X = df[cols]
+
+        # Split data into training and testing sets
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        # Standardize features (important for    Lasso)
+        scaler = StandardScaler()
+        X_train = scaler.fit_transform(X_train)
+        X_test = scaler.transform(X_test)
+
+        # Create a logistic regression model          with L1 regularization (Lasso)
+        clf = LogisticRegression(penalty='l1', solver='liblinear')
+
+        # Fit the model to the training data
+        clf.fit(X_train, y_train)
+        probability_pred = clf.predict_proba(reshaped_data)[:, 0]
+        result = probability_pred[0] * 100
+        prt = f"You have a {result:.0f}% probability you will be diagnosed with diabetes."
         return prt
 
     def graph_df(self, df, x, y):
@@ -1826,7 +1856,7 @@ def update_prediction(income, gen_health, phy_health, men_health, diff):
     if None in all_input_data:
         return 'Enter all data'
 
-    prediction = prepared_data.make_prediction(all_input_data)
+    prediction = prepared_data.pred_Lasso(all_input_data)
     return f"Predicted outcome: {prediction}"
 
 
