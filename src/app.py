@@ -2,6 +2,7 @@ import dash
 
 # Creates the interactive dashboard using the dash library
 import matplotlib.pyplot as plt
+from dash.dash_table.Format import Group
 import pandas as pd
 import numpy as np
 from dash import dash_table
@@ -17,6 +18,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from PIL import Image
+
+
 
 url = (
     "https://archive.ics.uci.edu/static/public/891/data.csv"
@@ -379,31 +382,31 @@ class PrepareData:
             prt = f"You have a {result:.0f}% probability you will be diagnosed with diabetes."
 
         return prt
-    def pred_Lasso(self,user_input):
+
+    def __init__(self):
+        # Load data and preprocess outside the function
+        self.cols = ['Income', 'GenHlth', 'MentHlth', 'PhysHlth', 'DiffWalk']
+        self.df = self.read_local_data('all', 'data/raw')
+        self.y = self.df['Diabetes_binary']
+        self.X = self.df[self.cols]
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.2,
+                                                                                random_state=42)
+        self.scaler = StandardScaler()
+        self.scaler.fit(self.X_train)
+        self.X_train = self.scaler.transform(self.X_train)
+        self.X_test = self.scaler.transform(self.X_test)
 
 
+        # Create and fit the Lasso model outside the function
+        self.clf = LogisticRegression(penalty='l1', solver='liblinear')  # Experiment with solvers
+        self.clf.fit(self.X_train, self.y_train)
 
-        # Assuming you have your  
-        #data as X(features) and y(target variable)
-        cols = ['Income', 'GenHlth', 'MentHlth', 'PhysHlth', 'DiffWalk']
-        df = self.read_local_data('all', 'data/raw')
-        y = df['Diabetes_binary']
-        X = df[cols]
+    def pred_Lasso(self, user_input):
+        # Reshape user input directly
+        data = np.array(user_input).reshape(1, 5)
 
-        # Split data into training and testing sets
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-        # Standardize features (important for    Lasso)
-        scaler = StandardScaler()
-        X_train = scaler.fit_transform(X_train)
-        X_test = scaler.transform(X_test)
-
-        # Create a logistic regression model          with L1 regularization (Lasso)
-        clf = LogisticRegression(penalty='l1', solver='liblinear')
-
-        # Fit the model to the training data
-        clf.fit(X_train, y_train)
-        probability_pred = clf.predict_proba(reshaped_data)[:, 0]
+        # Use preprocessed data and trained model
+        probability_pred = self.clf.predict_proba(data)[:, 0]
         result = probability_pred[0] * 100
         prt = f"You have a {result:.0f}% probability you will be diagnosed with diabetes."
         return prt
@@ -609,8 +612,8 @@ user_input_value = 1
 ##########################################################################################
 #################      READ LOCAL DATA :  ALL   ##########################################
 ##########################################################################################
-prepared_data = PrepareData(download_new=False)
-df = prepared_data.read_local_data('all', "data/prepared")
+#prepared_data = PrepareData(download_new=False)
+#df = prepared_data.read_local_data('all', "data/prepared")
 ##########################################################################################
 
 
@@ -829,7 +832,7 @@ def create_raw_table(raw):
         ],
     )
 
-
+prepared_data = PrepareData()
 raw = prepared_data.read_local_data('all', 'data/raw')
 
 #################################################
