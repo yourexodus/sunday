@@ -2,6 +2,7 @@ import dash
 
 # Creates the interactive dashboard using the dash library
 import matplotlib.pyplot as plt
+from dash.dash_table.Format import Group
 import pandas as pd
 import numpy as np
 from dash import dash_table
@@ -14,7 +15,11 @@ from plotly.subplots import make_subplots
 import plotly.express as px
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 from PIL import Image
+
+
 
 url = (
     "https://archive.ics.uci.edu/static/public/891/data.csv"
@@ -361,7 +366,7 @@ class PrepareData:
         scaler.fit(X)
         X_scaled = scaler.transform(X)
 
-        rfc = RandomForestClassifier(random_state=1234)
+        rfc = RandomForestClassifier(n_jobs=1, random_state=1234)
         rfc.fit(X_scaled, y)
         data = user_input
         reshaped_data = np.array(data).reshape(1, 5)
@@ -373,9 +378,37 @@ class PrepareData:
             prt = f"You have a {result:.0f}% probability you will not be diagnosed with diabetes."
         else:
             probability_pred = rfc.predict_proba(reshaped_data)[:, 0]
-            result = probability_pred[0] * 100
+            result = probability_pred[1] * 100
             prt = f"You have a {result:.0f}% probability you will be diagnosed with diabetes."
 
+        return prt
+
+    def __init__(self):
+        # Load data and preprocess outside the function
+        self.cols = ['Income', 'GenHlth', 'MentHlth', 'PhysHlth', 'DiffWalk']
+        self.df = self.read_local_data('all', 'data/raw')
+        self.y = self.df['Diabetes_binary']
+        self.X = self.df[self.cols]
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.2,
+                                                                                random_state=42)
+        self.scaler = StandardScaler()
+        self.scaler.fit(self.X_train)
+        self.X_train = self.scaler.transform(self.X_train)
+        self.X_test = self.scaler.transform(self.X_test)
+
+
+        # Create and fit the Lasso model outside the function
+        self.clf = LogisticRegression(penalty='l1', solver='liblinear')  # Experiment with solvers
+        self.clf.fit(self.X_train, self.y_train)
+
+    def pred_Lasso(self, user_input):
+        # Reshape user input directly
+        data = np.array(user_input).reshape(1, 5)
+
+        # Use preprocessed data and trained model
+        probability_pred = self.clf.predict_proba(data)[:, 0]
+        result = probability_pred[0] * 100
+        prt = f"You have a {result:.0f}% probability you will be diagnosed with diabetes."
         return prt
 
     def graph_df(self, df, x, y):
@@ -579,8 +612,8 @@ user_input_value = 1
 ##########################################################################################
 #################      READ LOCAL DATA :  ALL   ##########################################
 ##########################################################################################
-prepared_data = PrepareData(download_new=False)
-df = prepared_data.read_local_data('all', "data/prepared")
+#prepared_data = PrepareData(download_new=False)
+#df = prepared_data.read_local_data('all', "data/prepared")
 ##########################################################################################
 
 
@@ -648,7 +681,7 @@ doctorcat_item = html.Div(
 doctorcat_item.style = {'gridArea': "doctorcat_item"}
 
 # Update the video element to use the get_video_frame function
-meowmidwest_img_path = "assets/MeowMidwest.gif"
+meowmidwest_img_path = "src/assets/MeowMidwest.gif"
 meowmidwest_item = html.Div(
     [
         html.Img(src=meowmidwest_img_path, alt="Meow Midwest", style={"width": "550px", "height": "500px"})
@@ -799,7 +832,7 @@ def create_raw_table(raw):
         ],
     )
 
-
+prepared_data = PrepareData()
 raw = prepared_data.read_local_data('all', 'data/raw')
 
 #################################################
@@ -1826,7 +1859,7 @@ def update_prediction(income, gen_health, phy_health, men_health, diff):
     if None in all_input_data:
         return 'Enter all data'
 
-    prediction = prepared_data.make_prediction(all_input_data)
+    prediction = prepared_data.pred_Lasso(all_input_data)
     return f"Predicted outcome: {prediction}"
 
 
