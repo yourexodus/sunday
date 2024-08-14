@@ -630,7 +630,7 @@ link = dbc.NavLink("View Github Repository", href="https://github.com/yourexodus
 #### ********************************  ######
 #############      BANNER ITEM   ############
 #### ********************************  ######
-banner_img_path = "src/assets/banner2.PNG"
+banner_img_path = "assets/banner2.PNG"
 banner_img = Image.open(banner_img_path)
 
 banner_item = dbc.Row(
@@ -648,7 +648,7 @@ banner_item = dbc.Row(
 #########              mytable ITEMs:                  ##############
 #########      doctorcat_item and meowmidwest_item    ##############
 ######### ********************************  ########################
-doctorcat_img_path = "src/assets/doctorcat.png"
+doctorcat_img_path = "assets/doctorcat.png"
 doctorcat_img = Image.open(doctorcat_img_path)
 
 doctorcat_item = html.Div(
@@ -681,7 +681,7 @@ doctorcat_item = html.Div(
 doctorcat_item.style = {'gridArea': "doctorcat_item"}
 
 # Update the video element to use the get_video_frame function
-meowmidwest_img_path = "src/assets/MeowMidwest.mp4"
+meowmidwest_img_path = "assets/MeowMidwest.mp4"
 meowmidwest_item = html.Div(
     [
         html.Img(src=meowmidwest_img_path, alt="Meow Midwest", style={"width": "550px", "height": "500px"})
@@ -844,7 +844,7 @@ raw_table = create_raw_table(raw)
 ################   BORDER ITEM  ###########################################
 ###########################################################################
 
-border1_img_path = "src/assets/border1.png"
+border1_img_path = "assets/border1.png"
 border1_img = Image.open(border1_img_path)
 
 border1_item = dbc.Row(
@@ -909,7 +909,7 @@ treatment = [
 #############################################################
 ################     exploredata_item        #################
 ###############################################################
-exploredata_img_path = "src/assets/exploredata.png"
+exploredata_img_path = "assets/exploredata.png"
 exploredata_img = Image.open(exploredata_img_path)
 exploredata_item = html.Div(
     [
@@ -945,7 +945,7 @@ exploredata_item.style = {'gridArea': "exploredata_item"}
 ################     heatmap_item       ######################
 ###############################################################
 
-heatmap_img_path = "src/assets/heatmap.PNG"
+heatmap_img_path = "assets/heatmap.PNG"
 heatmap_img = Image.open(heatmap_img_path)
 heatmap_item = html.Div(
     [
@@ -980,7 +980,7 @@ heatmap_item.style = {'gridArea': "heatmap_item"}
 ############################################################
 ################     boxplot_item       ######################
 ###############################################################
-boxplot_img_path = "src/assets/boxplot.PNG"
+boxplot_img_path = "assets/boxplot.PNG"
 boxplot_img = Image.open(boxplot_img_path)
 boxplot_item = html.Div(
     [
@@ -1017,7 +1017,7 @@ boxplot_item.style = {'gridArea': "boxplot_item"}
 ############################################################
 ################     outliers_item       ######################
 ###############################################################
-outliers_img_path = "src/assets/outliers.png"
+outliers_img_path = "assets/outliers.png"
 outliers_img = Image.open(outliers_img_path)
 outliers_item = html.Div(
     [
@@ -1052,7 +1052,7 @@ outliers_item.style = {'gridArea': "outliers_item"}
 ############################################################
 ################     updatecolumns_item       ################
 ###############################################################
-updateColumns_img_path = "src/assets/updateColumns.png"
+updateColumns_img_path = "assets/updateColumns.png"
 updateColumns_img = Image.open(updateColumns_img_path)
 
 updatecolumns_item = html.Div(
@@ -1269,7 +1269,7 @@ analysis_graph_figure = dcc.Graph(figure=analysis_graph, id="analysis_graph_figu
 ##################    PREDICTION MODELING SECTION #######################################
 #########################################################################################
 
-Model_img_path = "src/assets/Model.png"
+Model_img_path = "assets/Model.png"
 Model_img = Image.open(Model_img_path)
 
 Model_item = html.Div(
@@ -1308,7 +1308,7 @@ programlink = html.A('Python Program Making Prediction',
                      href="https://github.com/yourexodus/capstone_CDC/blob/4b4f4f3c0933f6968cb9b2651c8c35f3f5372d1f/Prediction_Menu.py")
 
 ##############################################
-predictionCode_img_path = "src/assets/predictionCode.png"
+predictionCode_img_path = "assets/predictionCode.png"
 predictionCode_img = Image.open(predictionCode_img_path)
 predictionCode_item = html.Div(
     [
@@ -1367,7 +1367,7 @@ mytable2 = html.Table([data_row2])
 ##############         TESTING PROGRAM                    ##############################
 #########################################################################################
 
-flowchart_img_path = "src/assets/flowchart.png"
+flowchart_img_path = "assets/flowchart.png"
 flowchart_img = Image.open(flowchart_img_path)
 
 flowchart_item = html.Div(
