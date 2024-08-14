@@ -1614,7 +1614,7 @@ def callback_d(diff_value):
 #################################################
 ###### call back for phy health
 ############################################
-"""
+
 @app.callback(
     Output('prediction-output', 'children'),
     [Input('menu_income_id', 'value'),
@@ -1660,7 +1660,7 @@ def change_area_graphs(sum_cell, sum_data):
     #   Returns
     #    -------
     #    List of three plotly figures, one for each of the `Output`
-    """
+"""
     row_number = sum_cell["row"]
     row_data = sum_data[row_number]  #
 
