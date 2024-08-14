@@ -1,5 +1,4 @@
 import dash
-
 # Creates the interactive dashboard using the dash library
 import matplotlib.pyplot as plt
 from dash.dash_table.Format import Group
