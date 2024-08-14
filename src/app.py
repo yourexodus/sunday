@@ -678,12 +678,7 @@ doctorcat_item = html.Div(
     ]
 )
 doctorcat_item.style = {'gridArea': "doctorcat_item"}
-
-# Update the video element to use the get_video_frame function
-#### ********************************  ######
-#############      BANNER ITEM   ############
-#### ********************************  ######
-# MeowMidwest_img_path = "assets/MeowMidwest.mp4"
+MeowMidwest_img_path = "assets/MeowMidwest.mp4"
 
 MeowMidwest_item = html.Div(
     [
@@ -692,7 +687,7 @@ MeowMidwest_item = html.Div(
                 [
                     html.Div([
 
-                        html.Video(id='my-video', controls=True, src='assets/MeowMidwest.mp4',
+                        html.Video(id='my-video', controls=True, src=MeowMidwest_img_path,
                                    style={'width': '100%', 'height': '500px', 'justify-content': 'center',
                                           'align-items': 'center'})
 
@@ -712,9 +707,21 @@ MeowMidwest_item = html.Div(
         html.Br()
     ]
 )
-"""
+
 MeowMidwest_item.style = {'gridArea': "MeowMidwest_item"}
-##########3
+################     mytable2                   ##############
+###############################################################
+
+# Define table header and data
+header = html.Thead(
+    html.Tr([html.Th("Test")])  # Single header row with a single column
+)
+
+data_row = html.Tr([html.Td(doctorcat_item), html.Td(MeowMidwest_item)])  # Single data row with two cells
+
+# Create the table
+mytable = html.Table([data_row])
+
 
 
 # Define table header and data
@@ -722,10 +729,6 @@ header = html.Thead(
     html.Tr([html.Th("Midwest Meow Hospital hours: Sun-up to Sun-down")])  # Single header row with a single column
 )
 
-#data_row = html.Tr([html.Td(doctorcat_item), html.Td(meowmidwest_item)])
-
-# Create the table
-#mytable = html.Table([data_row])
 
 #########################################################################################
 #########################################################################################
@@ -1389,7 +1392,7 @@ header = html.Thead(
 data_row2 = html.Tr([html.Td(predictionCode_item), html.Td(code_item)])  # Single data row with two cells
 
 # Create the table
-#mytable2 = html.Table([data_row2])
+mytable2 = html.Table([data_row2])
 
 ########################################################################################
 ##############         TESTING PROGRAM                    ##############################
@@ -1435,14 +1438,10 @@ app.layout = dbc.Container([
     # Header section for banner and links
     dbc.Row([
         dbc.Col(banner_item),
-        dbc.Col(link, className="ml-auto")
+        dbc.Col(link, className="ml-auto"),
+        dbc.Col(mytable)
     ]),
-    dbc.Row(
-        dbc.Col([doctorcat_item]),
-        dbc.Col([MeowMidwest_item])
-
-
-    ),
+    #dbc.Col(mytable),
     dbc.Row(
         [
             dbc.Col(
@@ -1545,73 +1544,6 @@ app.layout = dbc.Container([
 
 
 ])
-
-"""
-
-
-#########################################
-############ call back for income drop down
-###############################
-
-@app.callback(
-    Output('income-output', 'children'),
-    [Input('menu_income_id', 'value')]
-
-)
-def callback_a(income_value):
-    # Access and use the global variable here
-    # For example:
-
-    return f"You've selected: {income_value}"
-
-
-#################################################3
-########### call back for gen health ###########
-#########################
-@app.callback(
-    Output('gen-health-output', 'children'),
-    [Input('gen_health_id', 'value')]
-)
-def callback_b(gen_health_value):
-    gl_gen_health = gen_health_value
-    return 'Youve selected "{}"'.format(gen_health_value)
-
-
-#################################################
-###### call back for phy health
-############################################
-@app.callback(
-    Output('phy-health-output', 'children'),
-    [Input('phy_health_id', 'value')]
-)
-def callback_c(phy_health_value):
-    gl_phy_health = phy_health_value
-    return 'Youve selected "{}"'.format(phy_health_value)
-
-
-#################################################
-###### call back for phy health
-############################################
-@app.callback(
-    Output('men-health-output', 'children'),
-    [Input('men_health_id', 'value')]
-)
-def callback_d(men_health_value):
-    gl_men_health = men_health_value
-    return 'Youve selected "{}"'.format(men_health_value)
-
-
-@app.callback(
-    Output('diff2-output', 'children'),
-    [Input('diff2_id', 'value')]
-)
-def callback_d(diff_value):
-    gl_diff = diff_value
-    return 'Youve selected "{}"'.format(diff_value)
-
-
-#################################################
-###### call back for phy health
 ############################################
 
 @app.callback(
@@ -1636,9 +1568,6 @@ def update_prediction(income, gen_health, phy_health, men_health, diff):
 
 if __name__ == "__main__":
     app.run_server(debug=True, port=8056)
-    #return result + ".  Refresh your browser to start again"
-"""
-
 
 ###########################################################################
 ####### Call back for graphs
@@ -1650,19 +1579,19 @@ if __name__ == "__main__":
 )
 def change_area_graphs(sum_cell, sum_data):
     """
-    ##  Change the all three graphs in the upper right hand corner of the app
-    #   Parameters
-    #    ----------
-    ##    avg_cell : dict with keys `row` and `cell` mapped to integers of cell location
-    #   avg_data : list of dicts of one country per row.
-    #                    Has keys Country, Deaths, Cases, Deaths per Million, Cases per Million
-    #   Returns
-    #    -------
-    #    List of three plotly figures, one for each of the `Output`
-"""
+      Change the all three graphs in the upper right hand corner of the app
+       Parameters
+        ----------
+        avg_cell : dict with keys `row` and `cell` mapped to integers of cell location
+       avg_data : list of dicts of one country per row.
+                        Has keys Country, Deaths, Cases, Deaths per Million, Cases per Million
+       Returns
+        -------
+        List of three plotly figures, one for each of the `Output`
+    """
     row_number = sum_cell["row"]
-    row_data = sum_data[row_number]  #
+    row_data = sum_data[row_number]
 
-#   fig = prepared_data.create_dataframe_counts_specificGenH_fig(df, row_data["GeneralHealth"], row_data["Type"])
-#    return fig
-# """
+    fig = prepared_data.create_dataframe_counts_specificGenH_fig(df, row_data["GeneralHealth"], row_data["Type"])
+    return fig
+
