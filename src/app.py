@@ -681,20 +681,28 @@ doctorcat_item = html.Div(
 doctorcat_item.style = {'gridArea': "doctorcat_item"}
 
 # Update the video element to use the get_video_frame function
-MeowMidwest_img_path = "src/assets/MeowMidwest.gif"
+#### ********************************  ######
+#############      BANNER ITEM   ############
+#### ********************************  ######
+MeowMidwest_img_path = "assets/MeowMidwest.gif"
 MeowMidwest_img = Image.open(MeowMidwest_img_path)
 
 MeowMidwest_item = dbc.Row(
-    [
+    [  # Wrap the Col component in an array
         dbc.Col(
             [
-                dbc.CardImg(src=MeowMidwest_img, style={'height': '500px', 'width': '100%'}),
+                dbc.CardImg(src=MeowMidwest_img, style={'height': '200px', 'width': '100%'}),
                 # Add other components for sidebar and navbar here...
             ]
         )
     ]
 )
+
+
 MeowMidwest_item.style = {'gridArea': "MeowMidwest_item"}
+##########3
+
+
 # Define table header and data
 header = html.Thead(
     html.Tr([html.Th("Midwest Meow Hospital hours: Sun-up to Sun-down")])  # Single header row with a single column
@@ -1416,8 +1424,8 @@ app.layout = dbc.Container([
         dbc.Col(link, className="ml-auto")
     ]),
     dbc.Row(
-        dbc.Col(doctorcat_item),
-        dbc.Col(MeowMidwest_item)
+        dbc.Col([doctorcat_item, MeowMidwest_item])
+
 
     ),
     dbc.Row(
