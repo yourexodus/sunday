@@ -681,23 +681,29 @@ doctorcat_item = html.Div(
 doctorcat_item.style = {'gridArea': "doctorcat_item"}
 
 # Update the video element to use the get_video_frame function
-meowmidwest_img_path = "assets/MeowMidwest.gif"
-meowmidwest_item = html.Div(
+MeowMidwest_img_path = "src/assets/MeowMidwest.gif"
+MeowMidwest_img = Image.open(MeowMidwest_img_path)
+
+MeowMidwest_item = dbc.Row(
     [
-        html.Img(src=meowmidwest_img_path, alt="Meow Midwest", style={"width": "1080px", "height": "1080px"})
+        dbc.Col(
+            [
+                dbc.CardImg(src=MeowMidwest_img, style={'height': '500px', 'width': '100%'}),
+                # Add other components for sidebar and navbar here...
+            ]
+        )
     ]
 )
-
-meowmidwest_item.style = {'gridArea': "meowmidwest_item"}
+MeowMidwest_item.style = {'gridArea': "MeowMidwest_item"}
 # Define table header and data
 header = html.Thead(
     html.Tr([html.Th("Midwest Meow Hospital hours: Sun-up to Sun-down")])  # Single header row with a single column
 )
 
-data_row = html.Tr([html.Td(doctorcat_item), html.Td(meowmidwest_item)])
+#data_row = html.Tr([html.Td(doctorcat_item), html.Td(meowmidwest_item)])
 
 # Create the table
-mytable = html.Table([data_row])
+#mytable = html.Table([data_row])
 
 #########################################################################################
 #########################################################################################
@@ -1361,7 +1367,7 @@ header = html.Thead(
 data_row2 = html.Tr([html.Td(predictionCode_item), html.Td(code_item)])  # Single data row with two cells
 
 # Create the table
-mytable2 = html.Table([data_row2])
+#mytable2 = html.Table([data_row2])
 
 ########################################################################################
 ##############         TESTING PROGRAM                    ##############################
@@ -1410,9 +1416,9 @@ app.layout = dbc.Container([
         dbc.Col(link, className="ml-auto")
     ]),
     dbc.Row(
-        [
-            dbc.Col(mytable)
-        ]
+        dbc.Col(doctorcat_item),
+        dbc.Col(MeowMidwest_item)
+
     ),
     dbc.Row(
         [

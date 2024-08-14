@@ -703,7 +703,7 @@ header = html.Thead(
 #data_row = html.Tr([html.Td(doctorcat_item), html.Td(meowmidwest_item)])
 
 # Create the table
-mytable = html.Table([data_row])
+#mytable = html.Table([data_row])
 
 #########################################################################################
 #########################################################################################
@@ -1367,7 +1367,7 @@ header = html.Thead(
 data_row2 = html.Tr([html.Td(predictionCode_item), html.Td(code_item)])  # Single data row with two cells
 
 # Create the table
-mytable2 = html.Table([data_row2])
+#mytable2 = html.Table([data_row2])
 
 ########################################################################################
 ##############         TESTING PROGRAM                    ##############################
