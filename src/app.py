@@ -1424,7 +1424,8 @@ app.layout = dbc.Container([
         dbc.Col(link, className="ml-auto")
     ]),
     dbc.Row(
-        dbc.Col([doctorcat_item, MeowMidwest_item])
+        dbc.Col([doctorcat_item]),
+        dbc.Col([MeowMidwest_item])
 
 
     ),
