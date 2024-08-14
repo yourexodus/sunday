@@ -700,7 +700,7 @@ header = html.Thead(
     html.Tr([html.Th("Midwest Meow Hospital hours: Sun-up to Sun-down")])  # Single header row with a single column
 )
 
-data_row = html.Tr([html.Td(doctorcat_item), html.Td(meowmidwest_item)])
+#data_row = html.Tr([html.Td(doctorcat_item), html.Td(meowmidwest_item)])
 
 # Create the table
 mytable = html.Table([data_row])
