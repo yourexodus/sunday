@@ -648,7 +648,7 @@ doctorcat_item = html.Div(
 doctorcat_item.style = {'gridArea': "doctorcat_item"}
 
 # Update the video element to use the get_video_frame function
-meowmidwest_img_path = "assets/MeowMidwest.mp4"
+meowmidwest_img_path = "src/assets/MeowMidwest.gif"
 meowmidwest_item = html.Div(
     [
         html.Img(src=meowmidwest_img_path, alt="Meow Midwest", style={"width": "550px", "height": "500px"})
