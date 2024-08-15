@@ -1646,6 +1646,20 @@ app.layout = dbc.Container([
         dbc.Col(mytable2),
         dbc.Col(border1_item)
 
+    ]),
+    dbc.Row([
+        dbc.Col(html.H2("Step 5: Build the app")),
+        dbc.Col(flowchart_item),
+        dbc.Col(border1_item),
+        dbc.Col(html.H2("Summary Tools Used")),
+        dbc.Col([
+            html.Ul([
+            html.Li(step) for step in tools_used
+        ])
+
+
+        ])
+
     ])
 
 ])
