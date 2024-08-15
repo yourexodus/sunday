@@ -722,13 +722,10 @@ data_row = html.Tr([html.Td(doctorcat_item), html.Td(MeowMidwest_item)])  # Sing
 # Create the table
 mytable = html.Table([data_row])
 
-
-
 # Define table header and data
 header = html.Thead(
     html.Tr([html.Th("Midwest Meow Hospital hours: Sun-up to Sun-down")])  # Single header row with a single column
 )
-
 
 #########################################################################################
 #########################################################################################
@@ -787,8 +784,6 @@ diff = [
     {'label': '5: BLANK Not asked or Missing', 'value': 5},
 
 ]
-
-
 
 
 ############################################################################
@@ -862,6 +857,7 @@ def create_raw_table(raw):
             }
         ],
     )
+
 
 prepared_data = PrepareData()
 raw = prepared_data.read_local_data('all', 'data/raw')
@@ -1377,7 +1373,6 @@ code_item = html.Div(
 
 )
 
-
 code_item.style = {'gridArea': "code_item"}
 
 ##############################################################
@@ -1439,9 +1434,10 @@ app.layout = dbc.Container([
     dbc.Row([
         dbc.Col(banner_item),
         dbc.Col(link, className="ml-auto"),
-        dbc.Col(mytable)
+        dbc.Col(mytable),
+        dbc.Col(border1_item)
     ]),
-    #dbc.Col(mytable),
+
     dbc.Row(
         [
             dbc.Col(
@@ -1536,14 +1532,125 @@ app.layout = dbc.Container([
                     html.H2(id='prediction-output'),
                 ],
                 width=12,
-            )
+            ),
+
+            dbc.Col(border1_item),
+            dbc.Col(
+                [
+                    html.H1("Capstone: CDC Diabetes Project"),
+                ],
+                width=12,
+            ),
+            dbc.Col([
+                html.P("This is the result of a Logcial Regression Capstone Project used to determine the probability "
+                       "of diabetes based select features.  My desire is to use this capstone to demonstrate skills "
+                       "in the areas of data science, machine learning, and python to predict and outcome using data "
+                       "analysis.")
+
+            ]),
+            dbc.Col([
+                html.H2("About the Data"),
+                html.P(
+                    '"The Diabetes Health Indicators Dataset contains healthcare statistics and lifestyle survey '
+                    'information about people in general along with their diagnosis of diabetes. -- source: '
+                    'Machine learning repository"')
+            ]),
+            dbc.Col([
+                html.A('Available Data', href="https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators"),
+                html.Br(),  # Add a line break for better readability
+                html.A('CDC data Codes', href="https://www.cdc.gov/brfss/annual_data/2014/pdf/CODEBOOK14_LLCP.pdf")
+
+            ])
         ]
     ),
+    dbc.Row([
+        dbc.Col(html.H2("Raw Data")),
+        dbc.Col(raw_table),
+        dbc.Col(border1_item),
+        dbc.Col(html.H2("Step 1: Explored the Data")),
+        dbc.Col(html.Ul([
+            html.Li(step) for step in steps
+        ])
+        ),
+        dbc.Col(exploredata_item),
+        dbc.Col(heatmap_item),
+        dbc.Col(border1_item)
+    ]),
+    dbc.Row([
+        dbc.Col(html.H3("Identified issues with the data")),
+        dbc.Col(html.Ul([
+            html.Li(step) for step in issues])
+        ),
+        dbc.Col(boxplot_item),
+        dbc.Col(html.A("box plot shows large variances and outliers in Mental Health and Physical Health Data. This "
+                       "can affect my model performance.  Also, since the data is categorical data, I will use a "
+                       "categorical response to determine the probability of diabetes based the most prominent "
+                       "features identified in my heatmap. According to the stats, there is a 30point difference "
+                       "from min and max for Mental and Physical Health data")
+                ),
+        html.Br(),
+        dbc.Col(border1_item)
+    ]),
+    dbc.Row([
+        dbc.Col(html.H2("Step 2: Feature Engineered & Aggregated data")),
+        dbc.Col(html.H3("Purpose of this Section:")),
+        dbc.Col(html.Ul([
+            html.Li(step) for step in treatment
+        ])
+        ),
+        dbc.Col(html.H3("1. Address Outliers using IQR method")),
+        dbc.Col(outliers_item),
+        dbc.Col(html.A(
+            "I identied 14% percent of the records are outliers using IQP the lower & upper bounds in the "
+            "MentHlth data.  I identied 19% percent of the records are outliers using IQP the lower & upper "
+            "bounds in the PhysHlth data")
+        ),
+        html.Br(),
+        dbc.Col(html.H3("3-Replace codes with label for better interprepation of data")),
+        dbc.Col(updatecolumns_item),
+        dbc.Col(html.H5("Top 4 header rows of updated data table")),
+        dbc.Col(updated_table),
 
+        dbc.Col(html.H3("2- Aggregate and view Bar chart percentage")),
+        dbc.Col(graph_01),
+        html.Br(),
+        dbc.Col(html.A(
+            "Each row selected in the table below will provide insight on the percentages in the circle graph "
+            "above.  For furher insight you can select a row the 3 interactive Graphs below will update .  If you "
+            "hoover over the graphs you can see more information about the  selected population")
+        ),
+        html.Br(),
+        dbc.Col(summary_table),
+        dbc.Col(id='graph-output'),
+        dbc.Col(analysis_graph_figure),
+        dbc.Col(border1_item)
 
+    ]),
+    dbc.Row([
+        dbc.Col(html.H2("Step 3: Create Predictive models")),
+        html.Br(),
+        dbc.Col(html.H3("Nominal Classification Problem: Predict diabetes for a customer.")),
+        dbc.Col(html.A(
+            "Tested out several feature combination using Test Train Split method. Select the best accuracy score"),
+        ),
+        dbc.Col(html.H4("Feature columns are cols =['Income','GenHlth','MentHlth','PhysHlth','DiffWalk']"),
+                ),
+        html.Br(),
+        dbc.Col(html.H4("Target column is y  = df['Diabetes_binary']")),
+        dbc.Col(Model_item),
+        dbc.Col(border1_item)
+    ]),
+    dbc.Row([
+        dbc.Col(html.H2("Step 4: Create Test program to accept user input and display prediction")),
+        dbc.Col(programlink),
+        dbc.Col(mytable2),
+        dbc.Col(border1_item)
 
+    ])
 
 ])
+
+
 ############################################
 
 @app.callback(
@@ -1557,7 +1664,6 @@ app.layout = dbc.Container([
     prevent_initial_call=True
 )
 def update_prediction(income, gen_health, phy_health, men_health, diff):
-
     all_input_data = [income, gen_health, phy_health, men_health, diff]
     if None in all_input_data:
         return 'Enter all data'
@@ -1568,6 +1674,7 @@ def update_prediction(income, gen_health, phy_health, men_health, diff):
 
 if __name__ == "__main__":
     app.run_server(debug=True, port=8056)
+
 
 ###########################################################################
 ####### Call back for graphs
@@ -1594,4 +1701,3 @@ def change_area_graphs(sum_cell, sum_data):
 
     fig = prepared_data.create_dataframe_counts_specificGenH_fig(df, row_data["GeneralHealth"], row_data["Type"])
     return fig
-

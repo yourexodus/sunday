@@ -1734,7 +1734,9 @@ app.layout = dbc.Container([
     ,
     html.Div(
         children=[
-            html.H4("Target column is y  = df['Diabetes_binary']")
+            html.A("html.Br(),"),
+
+     
         ])
     ,
 
