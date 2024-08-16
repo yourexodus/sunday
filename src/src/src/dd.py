@@ -1,10 +1,9 @@
 import dash
+
 # Creates the interactive dashboard using the dash library
 import matplotlib.pyplot as plt
-from dash.dash_table.Format import Group
 import pandas as pd
 import numpy as np
-
 from dash import dash_table
 from dash_table import DataTable
 from dash.dependencies import Output, Input, State
@@ -15,8 +14,6 @@ from plotly.subplots import make_subplots
 import plotly.express as px
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
 from PIL import Image
 
 url = (
@@ -364,7 +361,7 @@ class PrepareData:
         scaler.fit(X)
         X_scaled = scaler.transform(X)
 
-        rfc = RandomForestClassifier(n_jobs=1, random_state=1234)
+        rfc = RandomForestClassifier(random_state=1234)
         rfc.fit(X_scaled, y)
         data = user_input
         reshaped_data = np.array(data).reshape(1, 5)
@@ -376,36 +373,9 @@ class PrepareData:
             prt = f"You have a {result:.0f}% probability you will not be diagnosed with diabetes."
         else:
             probability_pred = rfc.predict_proba(reshaped_data)[:, 0]
-            result = probability_pred[1] * 100
+            result = probability_pred[0] * 100
             prt = f"You have a {result:.0f}% probability you will be diagnosed with diabetes."
 
-        return prt
-
-    def __init__(self):
-        # Load data and preprocess outside the function
-        self.cols = ['Income', 'GenHlth', 'MentHlth', 'PhysHlth', 'DiffWalk']
-        self.df = self.read_local_data('all', 'data/raw')
-        self.y = self.df['Diabetes_binary']
-        self.X = self.df[self.cols]
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.2,
-                                                                                random_state=42)
-        self.scaler = StandardScaler()
-        self.scaler.fit(self.X_train)
-        self.X_train = self.scaler.transform(self.X_train)
-        self.X_test = self.scaler.transform(self.X_test)
-
-        # Create and fit the Lasso model outside the function
-        self.clf = LogisticRegression(penalty='l1', solver='liblinear')  # Experiment with solvers
-        self.clf.fit(self.X_train, self.y_train)
-
-    def pred_Lasso(self, user_input):
-        # Reshape user input directly
-        data = np.array(user_input).reshape(1, 5)
-
-        # Use preprocessed data and trained model
-        probability_pred = self.clf.predict_proba(data)[:, 0]
-        result = probability_pred[0] * 100
-        prt = f"You have a {result:.0f}% probability you will not be diagnosed with diabetes."
         return prt
 
     def graph_df(self, df, x, y):
@@ -594,16 +564,14 @@ class PrepareData:
 
         return fig
 
-
-app = dash.Dash(__name__, suppress_callback_exceptions=True)
-# app = dash.Dash(__name__)
-# app = dash.Dash(
+app = dash.Dash(__name__)
+#app = dash.Dash(
 #    __name__,
 #    # stylesheet for dash_bootstrap_components
 #    external_stylesheets=[
 #        "https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/flatly/bootstrap.min.css"
 #    ],
-# )
+#)
 server = app.server
 # Initialize user_input_value
 user_input_value = 1
@@ -611,8 +579,8 @@ user_input_value = 1
 ##########################################################################################
 #################      READ LOCAL DATA :  ALL   ##########################################
 ##########################################################################################
-# prepared_data = PrepareData(download_new=False)
-# df = prepared_data.read_local_data('all', "data/prepared")
+prepared_data = PrepareData(download_new=False)
+df = prepared_data.read_local_data('all', "data/prepared")
 ##########################################################################################
 
 
@@ -629,7 +597,7 @@ link = dbc.NavLink("View Github Repository", href="https://github.com/yourexodus
 #### ********************************  ######
 #############      BANNER ITEM   ############
 #### ********************************  ######
-banner_img_path = "assets/banner2.PNG"
+banner_img_path = "src/assets/banner2.PNG"
 banner_img = Image.open(banner_img_path)
 
 banner_item = dbc.Row(
@@ -647,7 +615,7 @@ banner_item = dbc.Row(
 #########              mytable ITEMs:                  ##############
 #########      doctorcat_item and meowmidwest_item    ##############
 ######### ********************************  ########################
-doctorcat_img_path = "assets/doctorcat.png"
+doctorcat_img_path = "src/assets/doctorcat.png"
 doctorcat_img = Image.open(doctorcat_img_path)
 
 doctorcat_item = html.Div(
@@ -678,54 +646,38 @@ doctorcat_item = html.Div(
     ]
 )
 doctorcat_item.style = {'gridArea': "doctorcat_item"}
-MeowMidwest_img_path = "assets/MeowMidwest.mp4"
 
-MeowMidwest_item = html.Div(
+# Update the video element to use the get_video_frame function
+
+##################  meowmidwest
+MeowMidwest_img_path = "src/assets/MeowMidwest.gif"
+MeowMidwest_img = Image.open(MeowMidwest_img_path)
+
+MeowMidwest_item = dbc.Row(
     [
-        html.Div(
-            html.Div(
-                [
-                    html.Div([
-
-                        html.Video(id='my-video', controls=True, src=MeowMidwest_img_path,
-                                   style={'width': '100%', 'height': '500px', 'justify-content': 'center',
-                                          'align-items': 'center'})
-
-                    ]),
-                    html.Div(className="sidebar-wrapper"),
-                ]
-            ),
-            className="sidebar",
-        ),
-        html.Div(
-            html.Div(
-                html.Div(className="container-fluid"),
-                className="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ",
-            ),
-            className="main-panel",
-        ),
-        html.Br()
+        dbc.Col(
+            [
+                dbc.CardImg(src=MeowMidwest_img, style={'height': '500px', 'width': '100%'}),
+                # Add other components for sidebar and navbar here...
+            ]
+        )
     ]
 )
-
 MeowMidwest_item.style = {'gridArea': "MeowMidwest_item"}
-################     mytable2                   ##############
-###############################################################
 
-# Define table header and data
-header = html.Thead(
-    html.Tr([html.Th("Test")])  # Single header row with a single column
-)
+###########################
 
-data_row = html.Tr([html.Td(doctorcat_item), html.Td(MeowMidwest_item)])  # Single data row with two cells
 
-# Create the table
-mytable = html.Table([data_row])
 
 # Define table header and data
 header = html.Thead(
     html.Tr([html.Th("Midwest Meow Hospital hours: Sun-up to Sun-down")])  # Single header row with a single column
 )
+
+data_row = html.Tr([html.Td(doctorcat_item), html.Td(meowmidwest_item)])
+
+# Create the table
+mytable = html.Table([data_row])
 
 #########################################################################################
 #########################################################################################
@@ -784,6 +736,14 @@ diff = [
     {'label': '5: BLANK Not asked or Missing', 'value': 5},
 
 ]
+
+
+#############################################################################
+################## Layout Diff:  will hold the result of the prediction #####
+
+############################################################################
+################## Layout: Prediction VALUE message ########################
+############################################################################
 
 
 ############################################################################
@@ -859,7 +819,6 @@ def create_raw_table(raw):
     )
 
 
-prepared_data = PrepareData()
 raw = prepared_data.read_local_data('all', 'data/raw')
 
 #################################################
@@ -871,7 +830,7 @@ raw_table = create_raw_table(raw)
 ################   BORDER ITEM  ###########################################
 ###########################################################################
 
-border1_img_path = "assets/border1.png"
+border1_img_path = "src/assets/border1.png"
 border1_img = Image.open(border1_img_path)
 
 border1_item = dbc.Row(
@@ -936,7 +895,7 @@ treatment = [
 #############################################################
 ################     exploredata_item        #################
 ###############################################################
-exploredata_img_path = "assets/exploredata.png"
+exploredata_img_path = "src/assets/exploredata.png"
 exploredata_img = Image.open(exploredata_img_path)
 exploredata_item = html.Div(
     [
@@ -972,7 +931,7 @@ exploredata_item.style = {'gridArea': "exploredata_item"}
 ################     heatmap_item       ######################
 ###############################################################
 
-heatmap_img_path = "assets/heatmap.PNG"
+heatmap_img_path = "src/assets/heatmap.PNG"
 heatmap_img = Image.open(heatmap_img_path)
 heatmap_item = html.Div(
     [
@@ -1007,7 +966,7 @@ heatmap_item.style = {'gridArea': "heatmap_item"}
 ############################################################
 ################     boxplot_item       ######################
 ###############################################################
-boxplot_img_path = "assets/boxplot.PNG"
+boxplot_img_path = "src/assets/boxplot.PNG"
 boxplot_img = Image.open(boxplot_img_path)
 boxplot_item = html.Div(
     [
@@ -1044,7 +1003,7 @@ boxplot_item.style = {'gridArea': "boxplot_item"}
 ############################################################
 ################     outliers_item       ######################
 ###############################################################
-outliers_img_path = "assets/outliers.png"
+outliers_img_path = "src/assets/outliers.png"
 outliers_img = Image.open(outliers_img_path)
 outliers_item = html.Div(
     [
@@ -1079,7 +1038,7 @@ outliers_item.style = {'gridArea': "outliers_item"}
 ############################################################
 ################     updatecolumns_item       ################
 ###############################################################
-updateColumns_img_path = "assets/updateColumns.png"
+updateColumns_img_path = "src/assets/updateColumns.png"
 updateColumns_img = Image.open(updateColumns_img_path)
 
 updatecolumns_item = html.Div(
@@ -1296,7 +1255,7 @@ analysis_graph_figure = dcc.Graph(figure=analysis_graph, id="analysis_graph_figu
 ##################    PREDICTION MODELING SECTION #######################################
 #########################################################################################
 
-Model_img_path = "assets/Model.png"
+Model_img_path = "src/assets/Model.png"
 Model_img = Image.open(Model_img_path)
 
 Model_item = html.Div(
@@ -1335,7 +1294,7 @@ programlink = html.A('Python Program Making Prediction',
                      href="https://github.com/yourexodus/capstone_CDC/blob/4b4f4f3c0933f6968cb9b2651c8c35f3f5372d1f/Prediction_Menu.py")
 
 ##############################################
-predictionCode_img_path = "assets/predictionCode.png"
+predictionCode_img_path = "src/assets/predictionCode.png"
 predictionCode_img = Image.open(predictionCode_img_path)
 predictionCode_item = html.Div(
     [
@@ -1373,6 +1332,7 @@ code_item = html.Div(
 
 )
 
+
 code_item.style = {'gridArea': "code_item"}
 
 ##############################################################
@@ -1393,7 +1353,7 @@ mytable2 = html.Table([data_row2])
 ##############         TESTING PROGRAM                    ##############################
 #########################################################################################
 
-flowchart_img_path = "assets/flowchart.png"
+flowchart_img_path = "src/assets/flowchart.png"
 flowchart_img = Image.open(flowchart_img_path)
 
 flowchart_item = html.Div(
@@ -1428,266 +1388,466 @@ flowchart_item.style = {'gridArea': "flowchart_item"}
 ##################    LAYOUT SECTION ####################################################
 #########################################################################################
 
+# layout is saved to a variable so I dont have to keep running it
+app.layout = html.Div([
+    link,
+    banner_item,
+    mytable,  # add doctor cat
+    ########################################################
+    ############# Prediction output ######################
+    html.Div(html.H2("Questionaire"))
+    ,
+    html.Br()
+    ,
+    html.Div(
 
-app.layout = dbc.Container([
-    # Header section for banner and links
-    dbc.Row([
-        dbc.Col(banner_item),
-        dbc.Col(link, className="ml-auto"),
-        dbc.Col(mytable),
-        dbc.Col(border1_item)
-    ]),
-
-    dbc.Row(
-        [
-            dbc.Col(
-                [
-                    html.H2("Questionnaire"),
-                ],
-                width=12,
+        children=[
+            html.A(
+                "Note: drop downs are in a persistence state.  click new values in all the fields to populate a prediction.  The last field will calls the prediction.  It can take up to 4 minutes  to display")
+        ])
+    ,
+    ########################################################################################################
+    ################## Define input and out for income drop down ###########################################
+    #######################################################################################################
+    html.Br()
+    ,
+    html.Div(
+        children=[
+            'Please choose your income range.:', dcc.Dropdown(
+                id='menu_income_id',
+                options=menu_income,
+                placeholder="Please choose your income range.",
+                value=user_input_value,
+                persistence=True,  # store user dropdown
             )
-        ]
-    )
-    ,
-    dbc.Row(
-        [
-            dbc.Col(
-                [
-                    html.Label("Income Range"),
-                    dcc.Dropdown(
-                        id='menu_income_id',
-                        options=menu_income,
-                        placeholder="Please choose your income range.",
-                        value=user_input_value,
-                        persistence=True,  # store user dropdown
-                    ),
-                    html.Div(id='income-output'),
-                ],
-                width=3,
-            ),
-            dbc.Col(
-                [
-                    html.Label("General Health"),
-                    dcc.Dropdown(
-                        id='gen_health_id',
-                        options=gen_health,
-                        placeholder="Please enter your general health code.",
-                        value=user_input_value,
-                        persistence=True,  # store user dropdown
-                    ),
-                    html.Div(id='gen-health-output'),
-                ],
-                width=3,
-            ),
-            dbc.Col(
-                [
-                    html.Label("Physical Health"),
-                    dcc.Dropdown(
-                        id='phy_health_id',
-                        options=phy_health,
-                        placeholder="Please enter your physical health code.",
-                        value=user_input_value,
-                        persistence=True,  # store user dropdown
-                    ),
-                    html.Div(id='phy-health-output'),
-                ],
-                width=3,
-            ),
-            dbc.Col(
-                [
-                    html.Label("Mental Health"),
-                    dcc.Dropdown(
-                        id='men_health_id',
-                        options=men_health,
-                        placeholder="Please enter your mental health code.",
-                        value=user_input_value,
-                        persistence=True,  # store user dropdown
-                    ),
-                    html.Div(id='men-health-output'),
-                ],
-                width=3,
-            ),
-            dbc.Col(
-                [
-                    html.Label("Difficulty Walking"),
-                    dcc.Dropdown(
-                        id='diff_id',
-                        options=diff,
-                        placeholder="Please enter number of days you have difficult walking.",
-                        value=user_input_value,
-                        persistence=True,  # store user dropdown
-                    ),
-                    html.Div(id='diff-output'),
-                ],
-                width=3,
-            ),
-        ]
+        ],
+        style={
+            "display": "block"
+        }
+
     ),
-    dcc.Input(id='combined_input', type='hidden')  # Hidden input to store combined value
-    ,
-    dbc.Row(
-        [
-            dbc.Col(
-                [
-                    html.H2(id='prediction-output'),
-                ],
-                width=12,
-            ),
 
-            dbc.Col(border1_item),
-            dbc.Col(
-                [
-                    html.H1("Capstone: CDC Diabetes Project"),
-                ],
-                width=12,
-            ),
-            dbc.Col([
-                html.P("This is the result of a Logcial Regression Capstone Project used to determine the probability "
-                       "of diabetes based select features.  My desire is to use this capstone to demonstrate skills "
-                       "in the areas of data science, machine learning, and python to predict and outcome using data "
-                       "analysis.")
 
-            ]),
-            dbc.Col([
-                html.H2("About the Data"),
-                html.P(
-                    '"The Diabetes Health Indicators Dataset contains healthcare statistics and lifestyle survey '
-                    'information about people in general along with their diagnosis of diabetes. -- source: '
-                    'Machine learning repository"')
-            ]),
-            dbc.Col([
-                html.A('Available Data', href="https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators"),
-                html.Br(),  # Add a line break for better readability
-                html.A('CDC data Codes', href="https://www.cdc.gov/brfss/annual_data/2014/pdf/CODEBOOK14_LLCP.pdf")
+    ######################################################################
+    ##################  OUTPUT VALUE for income #######################
 
-            ])
-        ]
+    html.Div(id='income-output'),
+    html.Br(),
+    #################################################################################################
+    ###########  gen_health  ########################################################################
+    ################################################################################################
+    html.Div(  # Assuming user_input1 is a Div
+        children=[
+            "Please enter your general health code:", dcc.Dropdown(
+                id='gen_health_id',
+                options=gen_health,
+                placeholder="Please enter your general health code.",
+                value=user_input_value,
+                persistence=True,  # store user dropdown
+            )
+        ],
+        style={
+            "display": "block",  # Set display to block
+        }
     ),
-    dbc.Row([
-        dbc.Col(html.H2("Raw Data")),
-        dbc.Col(raw_table),
-        dbc.Col(border1_item),
-        dbc.Col(html.H2("Step 1: Explored the Data")),
-        dbc.Col(html.Ul([
+    ######################################################################
+    ##################  OUTPUT VALUE for general health #######################
+
+    html.Div(id='gen-health-output'),
+    html.Br(),
+    ################################################################################################
+    html.Div(
+        children=[
+            "Please choose your physical health code:", dcc.Dropdown(
+                id='phy_health_id',
+                options=phy_health,
+                placeholder="Please choose your physical health code.",
+                value=user_input_value,
+                persistence=True,  # store user dropdown
+            )
+        ],
+        style={
+            "display": "block"
+        }
+    ),
+    ######################################################################
+    ##################  OUTPUT VALUE for physical health days #######################
+
+    html.Div(id='phy-health-output'),
+    html.Br(),
+    ################################################################################################
+    html.Div(
+        children=[
+            "Please choose your physical health range:", dcc.Dropdown(
+                id='men_health_id',
+                options=men_health,
+                placeholder="Please choose your physical health range.",
+                value=user_input_value,
+                persistence=True,  # store user dropdown
+            )
+        ],
+        style={
+            "display": "block"
+        }
+    ),
+    ######################################################################
+    ##################  OUTPUT VALUE for mental health #######################
+
+    html.Div(id='diff-output'),
+    html.Br(),
+    #################################
+    html.Div(
+        children=[
+            "Please choose number of days you had diffculty walking:", dcc.Dropdown(
+                id='diff_id',
+                options=diff,
+                placeholder="Please choose number of days you had diffculty walking.",
+                value=user_input_value,
+                persistence=True,  # store user dropdown
+            )
+        ],
+        style={
+            "display": "block"
+        }
+    ),
+    html.Br(),
+    ######################################################################
+    ##################  OUTPUT VALUE for income #######################
+    html.Div(
+        children=[
+            html.H2(id='diff-output')
+        ])
+
+    ,
+    html.Br()
+    ,
+    html.Div(id='prediction-output')
+    ,
+
+    html.Br(),
+    html.Br(),
+    ################################
+    border1_item,
+    ###############################################
+    #########  About the Data ######################
+    ##############################################
+
+    html.Div(
+        children=[
+            html.H1("Capstone: CDC Diabetes Project")
+        ])
+    ,
+    html.Div(
+        children=[
+            html.P(
+                "This is the result of a Logcial Regression Capstone Project used to determine the probability of diabetes based select features.  My desire is to use this capstone to demonstrate skills in the areas of data science, machine learning, and python to predict and outcome using data analysis.")
+        ])
+    ,
+    html.Div(
+        children=[
+            html.H2("About the Data"),
+            html.P(
+                '"The Diabetes Health Indicators Dataset contains healthcare statistics and lifestyle survey information about people in general along with their diagnosis of diabetes. -- source: Machine learning repository"'),
+            html.A('Available Data', "https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators"),
+            html.A('CDC data Codes', "https://www.cdc.gov/brfss/annual_data/2014/pdf/CODEBOOK14_LLCP.pdf"),
+
+        ])
+    ,
+    html.Div(
+        children=[
+            html.H3("Raw data")
+        ])
+    ,
+    html.Div([raw_table])
+    ,
+    border1_item
+    ,
+    html.Div(
+        children=[
+            html.H2("Step 1: Explored the Data")
+        ])
+    ,
+
+    html.Div([
+        html.Ul([
             html.Li(step) for step in steps
         ])
-        ),
-        dbc.Col(exploredata_item),
-        dbc.Col(heatmap_item),
-        dbc.Col(border1_item)
-    ]),
-    dbc.Row([
-        dbc.Col(html.H3("Identified issues with the data")),
-        dbc.Col(html.Ul([
-            html.Li(step) for step in issues])
-        ),
-        dbc.Col(boxplot_item),
-        dbc.Col(html.A("box plot shows large variances and outliers in Mental Health and Physical Health Data. This "
-                       "can affect my model performance.  Also, since the data is categorical data, I will use a "
-                       "categorical response to determine the probability of diabetes based the most prominent "
-                       "features identified in my heatmap. According to the stats, there is a 30point difference "
-                       "from min and max for Mental and Physical Health data")
-                ),
-        html.Br(),
-        dbc.Col(border1_item)
-    ]),
-    dbc.Row([
-        dbc.Col(html.H2("Step 2: Feature Engineered & Aggregated data")),
-        dbc.Col(html.H3("Purpose of this Section:")),
-        dbc.Col(html.Ul([
-            html.Li(step) for step in treatment
-        ])
-        ),
-        dbc.Col(html.H3("1. Address Outliers using IQR method")),
-        dbc.Col(outliers_item),
-        dbc.Col(html.A(
-            "I identied 14% percent of the records are outliers using IQP the lower & upper bounds in the "
-            "MentHlth data.  I identied 19% percent of the records are outliers using IQP the lower & upper "
-            "bounds in the PhysHlth data")
-        ),
-        html.Br(),
-        dbc.Col(html.H3("3-Replace codes with label for better interprepation of data")),
-        dbc.Col(updatecolumns_item),
-        dbc.Col(html.H5("Top 4 header rows of updated data table")),
-        dbc.Col(updated_table),
-
-        dbc.Col(html.H3("2- Aggregate and view Bar chart percentage")),
-        dbc.Col(graph_01),
-        html.Br(),
-        dbc.Col(html.A(
-            "Each row selected in the table below will provide insight on the percentages in the circle graph "
-            "above.  For furher insight you can select a row the 3 interactive Graphs below will update .  If you "
-            "hoover over the graphs you can see more information about the  selected population")
-        ),
-        html.Br(),
-        dbc.Col(summary_table),
-        dbc.Col(id='graph-output'),
-        dbc.Col(analysis_graph_figure),
-        dbc.Col(border1_item)
-
-    ]),
-    dbc.Row([
-        dbc.Col(html.H2("Step 3: Create Predictive models")),
-        html.Br(),
-        dbc.Col(html.H3("Nominal Classification Problem: Predict diabetes for a customer.")),
-        dbc.Col(html.A(
-            "Tested out several feature combination using Test Train Split method. Select the best accuracy score"),
-        ),
-        dbc.Col(html.H4("Feature columns are cols =['Income','GenHlth','MentHlth','PhysHlth','DiffWalk']"),
-                ),
-        html.Br(),
-        dbc.Col(html.H4("Target column is y  = df['Diabetes_binary']")),
-        dbc.Col(Model_item),
-        dbc.Col(border1_item)
-    ]),
-    dbc.Row([
-        dbc.Col(html.H2("Step 4: Create Test program to accept user input and display prediction")),
-        dbc.Col(programlink),
-        dbc.Col(mytable2),
-        dbc.Col(border1_item)
-
-    ]),
-    dbc.Row([
-        dbc.Col(html.H2("Step 5: Build the app")),
-        dbc.Col(flowchart_item),
-        dbc.Col(border1_item),
-        dbc.Col(html.H2("Summary Tools Used")),
-        dbc.Col([
-            html.Ul([
-            html.Li(step) for step in tools_used
-        ])
-
-
-        ])
-
     ])
 
-])
+    ,
+    html.Div(
+        children=[
+            html.H3("Identified issues with the data")
+        ])
+
+    ,
+
+    html.Div([exploredata_item, heatmap_item])
+    ,
+    html.Div([
+        html.Ul([
+            html.Li(step) for step in issues
+        ])
+    ])
+    ,
+
+    html.Div([boxplot_item])
+
+    ,
+    html.Div(
+        children=[
+            html.A(
+                "box plot shows large variances and outliers in Mental Health and Physical Health Data. This can affect my model performance.  Also, since the data is categorical data, I will use a categorical response to determine the probability of diabetes based the most prominent features identified in my heatmap. According to the stats, there is a 30point difference from min and max for Mental and Physical Health data")
+        ])
+
+    ,
+    border1_item
+    ,
+    html.Div(
+        children=[
+            html.H2("Step 2: Feature Engineered & Aggregated data")
+        ])
+    ,
+
+    html.Div(
+        children=[
+            html.H3("Purpose of this Section:")
+        ])
+    ,
+    html.Div([
+        html.Ul([
+            html.Li(step) for step in treatment
+        ])
+    ])
+
+    ,
+
+    html.Div(
+        children=[
+            html.H3("1. Address Outliers using IQR method")
+        ])
+
+    ,
+
+    html.Div([outliers_item])
+
+    ,
+
+    html.Div(
+        children=[
+            html.A(
+                "I identied 14% percent of the records are outliers using IQP the lower & upper bounds in the MentHlth data.  I identied 19% percent of the records are outliers using IQP the lower & upper bounds in the PhysHlth data")
+        ])
+
+    ,
+    html.Br()
+    ,
+    html.Div(
+        children=[
+            html.H3("3-Replace codes with label for better interprepation of data")
+        ])
+
+    ,
+    html.Div([updatecolumns_item])
+
+    ,
+    html.Div(
+        children=[
+            html.A("Top 4 header rows of updated data table")
+        ])
+    ,
+    html.Div([updated_table])
+    ,
+    html.Br()
+    ,
+    html.Div(
+        children=[
+            html.H3("2- Aggregate and view Bar chart percentage")
+        ])
+    ,
+
+    html.Div([graph_01])
+    ,
+    html.Br()
+    ,
+    html.Div(
+        children=[
+            html.A(
+                "Each row selected in the table below will provide insight on the percentages in the circle graph above.  For furher insight you can select a row the 3 interactive Graphs below will update .  If you hoover over the graphs you can see more information about the  selected population")
+        ])
+
+    ,
+    html.Br()
+    ,
+    html.Div([summary_table])
+    ,
+    html.Div(id='graph-output')
+    ,
+    html.Div([analysis_graph_figure])
+    ,
+    border1_item
+
+    ,
+
+    html.Div(
+        children=[
+            html.H2("Step 3: Create Predictive models")
+        ])
+    ,
+    html.Br()
+    ,
+    html.Div(
+        children=[
+            html.H3("Nominal Classification Problem: Predict diabetis for a customer.")
+        ])
+    ,
+    html.Div(
+        children=[
+            html.A(
+                "Tested out several feature combination using Test Train Split method. Select the best accuracy score"),
+
+        ])
+
+    ,
+    html.Div(
+        children=[
+            html.A("Feature columns are cols =['Income','GenHlth','MentHlth','PhysHlth','DiffWalk']"),
+
+        ])
+
+    ,
+    html.Div(
+        children=[
+            html.H4("Target column is y  = df['Diabetes_binary']")
+        ])
+    ,
+
+    html.Div([Model_item])
+    ,
+    border1_item
+    ,
+
+    html.Div(
+        children=[
+            html.H2("Step 4: Create Test program to accept user input and display prediction")
+        ])
+    ,
+    programlink
+    ,
+    mytable2  # html.Div(programvideo_div)
+    ,
+    border1_item
+    ,
+
+    html.Div(
+        children=[
+            html.H2("Step 5: Build the app")
+        ])
+    ,
+    html.Div([flowchart_item])
+    ,
+
+    border1_item
+    ,
+    html.Div(
+        children=[
+            html.H2("Summary Tools Used")
+        ])
+    ,
+
+    html.Div([
+        html.Ul([
+            html.Li(step) for step in tools_used
+        ])
+    ])
+
+    ,
+], style={'padding': 10})
 
 
+#########################################
+############ call back for income drop down
+###############################
+
+@app.callback(
+    Output('income-output', 'children'),
+    [Input('menu_income_id', 'value')]
+
+)
+def callback_a(income_value):
+    # Access and use the global variable here
+    # For example:
+
+    return f"You've selected: {income_value}"
+
+
+#################################################3
+########### call back for gen health ###########
+#########################
+@app.callback(
+    Output('gen-health-output', 'children'),
+    [Input('gen_health_id', 'value')]
+)
+def callback_b(gen_health_value):
+    gl_gen_health = gen_health_value
+    return 'Youve selected "{}"'.format(gen_health_value)
+
+
+#################################################
+###### call back for phy health
+############################################
+@app.callback(
+    Output('phy-health-output', 'children'),
+    [Input('phy_health_id', 'value')]
+)
+def callback_c(phy_health_value):
+    gl_phy_health = phy_health_value
+    return 'Youve selected "{}"'.format(phy_health_value)
+
+
+#################################################
+###### call back for phy health
+############################################
+@app.callback(
+    Output('men-health-output', 'children'),
+    [Input('men_health_id', 'value')]
+)
+def callback_d(men_health_value):
+    gl_men_health = men_health_value
+    return 'Youve selected "{}"'.format(men_health_value)
+@app.callback(
+    Output('diff-output', 'children'),
+    [Input('diff_id', 'value')]
+)
+def callback_d(diff_value):
+    gl_diff = diff_value
+    return 'Youve selected "{}"'.format(diff_value)
+
+#################################################
+###### call back for phy health
 ############################################
 
 @app.callback(
     Output('prediction-output', 'children'),
-    [Input('menu_income_id', 'value'),
-     Input('gen_health_id', 'value'),
-     Input('phy_health_id', 'value'),
-     Input('men_health_id', 'value'),
-     Input('diff_id', 'value')
-     ],  # Combine all inputs into a single input
+    [Input('combined_input', 'value')],  # Combine all inputs into a single input
     prevent_initial_call=True
 )
-def update_prediction(income, gen_health, phy_health, men_health, diff):
-    all_input_data = [income, gen_health, phy_health, men_health, diff]
-    if None in all_input_data:
-        return 'Enter all data'
+def callback_e(combined_input):
+    if not all(combined_input.values()):
+        return 'Youve selected "{}"'.format(combined_input['diff_value'])
 
-    prediction = prepared_data.pred_Lasso(all_input_data)
-    return f"Predicted outcome: {prediction}"
+    # Extract values from the combined input
+    menu_income_id = combined_input['menu_income_id']
+    gen_health_id = combined_input['gen_health_id']
+    phy_health_id = combined_input['phy_health_id']
+    men_health_id = combined_input['men_health_id']
+    diff_value = combined_input['diff_value']
 
+    all_input_data = [menu_income_id, gen_health_id, phy_health_id, men_health_id, diff_value]
+    result = prepared_data.make_prediction(all_input_data)
+    return result
 
-if __name__ == "__main__":
-    app.run_server(debug=True, port=8056)
+    #return result + ".  Refresh your browser to start again"
 
 
 ###########################################################################
@@ -1699,19 +1859,24 @@ if __name__ == "__main__":
     State('sum-table', 'derived_virtual_data')
 )
 def change_area_graphs(sum_cell, sum_data):
-    """
-      Change the all three graphs in the upper right hand corner of the app
-       Parameters
-        ----------
-        avg_cell : dict with keys `row` and `cell` mapped to integers of cell location
-       avg_data : list of dicts of one country per row.
-                        Has keys Country, Deaths, Cases, Deaths per Million, Cases per Million
-       Returns
-        -------
-        List of three plotly figures, one for each of the `Output`
-    """
+    ##    """
+    ##  Change the all three graphs in the upper right hand corner of the app
+    #   Parameters
+    #    ----------
+    ##    avg_cell : dict with keys `row` and `cell` mapped to integers of cell location
+    #   avg_data : list of dicts of one country per row.
+    #                    Has keys Country, Deaths, Cases, Deaths per Million, Cases per Million
+    #   Returns
+    #    -------
+    #    List of three plotly figures, one for each of the `Output`
+    #    """
     row_number = sum_cell["row"]
     row_data = sum_data[row_number]
 
     fig = prepared_data.create_dataframe_counts_specificGenH_fig(df, row_data["GeneralHealth"], row_data["Type"])
     return fig
+
+
+if __name__ == "__main__":
+    app.run_server(debug=True)
+

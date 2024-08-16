@@ -405,7 +405,7 @@ class PrepareData:
         # Use preprocessed data and trained model
         probability_pred = self.clf.predict_proba(data)[:, 0]
         result = probability_pred[0] * 100
-        prt = f"You have a {result:.0f}% probability you will not be diagnosed with diabetes."
+        prt = f"You have a {result:.0f}% probability you will be diagnosed with diabetes."
         return prt
 
     def graph_df(self, df, x, y):
